@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+    <body>
+	
+	<style>
+	p {font-size: 25px}
+	#EUR {font-size: 20px}
+	#USD {font-size: 20px}
+	#GBP {font-size: 20px}
+	#CHF {font-size: 20px}
+	</style>
+	
+	<center>
+        <p>EUR - Euro: <input type = "EUR" id = "EUR" size = "3"></p>
+        <p>USD - US Dolar: <input type = "USD" id = "USD" size = "3"></p>
+        <p>GBP  - British Pound: <input type = "GBP" id = "GBP" size = "3"></p>
+        <p>CHF - Swiss Franc: <input type = "CHF" id = "CHF" size="3"></p>
+		
+		<button type = "button" onclick = "getJSON()">Load rate of exchange</button>
+	</center>
+    </body>
+	
+	<script>
+ function getJSON() {
+            var xmlhttp = new XMLHttpRequest();
+			method = "GET",
+			url = "http://api.nbp.pl/api/exchangerates/tables/A/today";
+			xmlhttp.open(method, url, true);
+			
+            xmlhttp.onreadystatechange = function() {
+
+				if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			
+					var data = JSON.parse(xmlhttp.responseText);
+					var currencies = document.querySelectorAll('[id]');
+					currencies.forEach(function(currency) {
+					document.getElementById(currency.id).value = data[0].rates.filter(r => r.code === currency.id)[0].mid;
+					});          
+				}	
+			};
+        
+        xmlhttp.send();
+}
+	</script>
+</html>
+
+
